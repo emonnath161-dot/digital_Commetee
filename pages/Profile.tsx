@@ -2,8 +2,9 @@
 import React, { useState, useRef } from 'react';
 import { User } from '../types';
 import { DESIGNATIONS, BLOOD_GROUPS } from '../constants';
-import { Save, LogOut, Phone, Mail, MapPin, Droplet, Camera, Edit2, ShieldCheck } from 'lucide-react';
+import { Save, LogOut, Phone, Mail, MapPin, Droplet, Camera, Edit2, ShieldCheck, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
 
 interface ProfileProps {
   user: User;
@@ -14,15 +15,40 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = ({ user, onUpdate, isDarkMode }) => {
   const [formData, setFormData] = useState<User>(user);
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   // Only "অর্থ সম্পাদক" or "সহ অর্থ সম্পাদক" can access Admin Panel
   const canAccessAdmin = user.designation === "অর্থ সম্পাদক" || user.designation === "সহ অর্থ সম্পাদক";
 
-  const handleSave = () => {
-    onUpdate(formData);
-    setIsEditing(false);
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      // ডাটাবেজে আপডেট পাঠানো হচ্ছে
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          name: formData.name,
+          email: formData.email,
+          blood_group: formData.bloodGroup,
+          profile_pic: formData.profilePic,
+          address: formData.address
+        })
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      // লোকাল স্টেট এবং অ্যাপ লেভেলে আপডেট করা
+      onUpdate(formData);
+      setIsEditing(false);
+      alert('প্রোফাইল সফলভাবে আপডেট করা হয়েছে!');
+    } catch (err: any) {
+      console.error("Update error:", err);
+      alert('আপডেট করতে সমস্যা হয়েছে: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLogout = () => {
@@ -39,6 +65,11 @@ const Profile: React.FC<ProfileProps> = ({ user, onUpdate, isDarkMode }) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // ফাইল সাইজ চেক (২ এমবির বেশি হলে রিজেক্ট করা ভালো)
+      if (file.size > 2 * 1024 * 1024) {
+        alert("ছবিটি ২ এমবির বেশি বড়! ছোট ছবি আপলোড করুন।");
+        return;
+      }
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData({ ...formData, profilePic: reader.result as string });
@@ -106,6 +137,16 @@ const Profile: React.FC<ProfileProps> = ({ user, onUpdate, isDarkMode }) => {
                     <p className="text-xl font-black text-red-600">{user.bloodGroup}</p>
                   </div>
                 </div>
+
+                <div className={`p-6 rounded-[2rem] flex items-center space-x-5 border shadow-sm transition-all duration-300 hover:shadow-md ${isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-gradient-to-r from-orange-50 to-white border-orange-50'}`}>
+                  <div className="bg-orange-600 p-3 rounded-2xl text-white shadow-lg">
+                    <MapPin size={24} />
+                  </div>
+                  <div className="flex-grow">
+                    <p className={`text-xs font-black uppercase tracking-wider ${isDarkMode ? 'text-orange-400' : 'text-orange-500'}`}>ঠিকানা</p>
+                    <p className={`text-sm font-bold ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>{user.address || 'তথ্য নেই'}</p>
+                  </div>
+                </div>
               </>
             ) : (
               <div className="space-y-5 px-2">
@@ -139,6 +180,15 @@ const Profile: React.FC<ProfileProps> = ({ user, onUpdate, isDarkMode }) => {
                     </select>
                   </div>
                 </div>
+                <div>
+                  <label className={`block text-xs font-black uppercase mb-2 ml-1 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>ঠিকানা</label>
+                  <input 
+                    type="text" 
+                    className={`w-full p-4 rounded-2xl border-2 outline-none transition ${isDarkMode ? 'bg-slate-900 border-slate-700 text-white focus:border-indigo-500' : 'bg-gray-50 border-transparent focus:border-indigo-600 text-gray-900'}`}
+                    value={formData.address}
+                    onChange={(e) => setFormData({...formData, address: e.target.value})}
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -155,10 +205,11 @@ const Profile: React.FC<ProfileProps> = ({ user, onUpdate, isDarkMode }) => {
             ) : (
               <button 
                 onClick={handleSave}
+                disabled={loading}
                 className="w-full py-5 bg-green-600 text-white rounded-[1.5rem] font-black text-xl shadow-xl shadow-green-100 dark:shadow-green-900/20 flex items-center justify-center space-x-3 active:scale-[0.98] transition hover:bg-green-700"
               >
-                <Save size={24} />
-                <span>পরিবর্তন সংরক্ষণ করুন</span>
+                {loading ? <Loader2 className="animate-spin" size={24} /> : <Save size={24} />}
+                <span>{loading ? 'সংরক্ষণ হচ্ছে...' : 'পরিবর্তন সংরক্ষণ করুন'}</span>
               </button>
             )}
 
