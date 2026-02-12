@@ -92,8 +92,9 @@ const SchoolDetail: React.FC<SchoolDetailProps> = ({ schools, currentUser, isDar
                   alt={student.name} 
                   className="w-full h-full object-cover" 
                 />
-                <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-[8px] font-black px-1.5 py-0.5 rounded-md">
-                  রোল: {student.roll}
+                {/* কার্ডের উপরে ব্যাজে রোল এর জায়গায় 'শ্রেণী' */}
+                <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-sm text-white text-[8px] font-black px-1.5 py-1 rounded-md">
+                  শ্রেণী: {student.roll}
                 </div>
               </div>
               
@@ -111,13 +112,10 @@ const SchoolDetail: React.FC<SchoolDetailProps> = ({ schools, currentUser, isDar
                     <span className={`${isDarkMode ? 'text-slate-300' : 'text-gray-700'} font-bold truncate`}>{student.motherName}</span>
                   </div>
                   
+                  {/* কার্ডের নিচে 'শ্রেণী' এর জায়গায় 'মোবাইল' */}
                   <div className={`mt-2 flex items-center font-black text-[10px] sm:text-xs pt-1 ${isDarkMode ? 'text-indigo-300' : 'text-indigo-700'}`}>
                     <Smartphone size={10} className="mr-1 flex-shrink-0" />
-                    <span className="tracking-tight">{student.mobile}</span>
-                  </div>
-                  
-                  <div className={`flex items-center font-bold text-[8px] sm:text-[9px] uppercase tracking-tighter ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                     শ্রেণী: {student.className}
+                    <span className="tracking-tight">মোবাইল: {student.className}</span>
                   </div>
                 </div>
               </div>

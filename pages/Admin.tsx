@@ -6,7 +6,7 @@ import {
   Plus, Trash2, Save, School as SchoolIcon, 
   Image as ImageIcon, Lock, Loader2, 
   ChevronRight, Edit, Phone, MapPin, Facebook, Globe, Camera, ArrowLeft, RefreshCcw, DollarSign,
-  User, Calendar, Layout, PlayCircle, Settings
+  User, Calendar, Layout, PlayCircle, Settings, Smartphone
 } from 'lucide-react';
 
 interface AdminProps {
@@ -88,7 +88,6 @@ const Admin: React.FC<AdminProps> = ({
     try {
       let payload: any = {};
       
-      // SQL DB কলামের সাথে ১০০% ম্যাপিং নিশ্চিত করা হয়েছে
       if (table === 'transactions') {
         payload = { 
           user_id: selectedMember?.id, 
@@ -217,7 +216,6 @@ const Admin: React.FC<AdminProps> = ({
       </div>
 
       <div className="px-1">
-        {/* USERS LIST SECTION */}
         {activeTab === 'users' && (
           <div className="space-y-6">
             <div className="flex items-center justify-between px-4">
@@ -243,7 +241,6 @@ const Admin: React.FC<AdminProps> = ({
           </div>
         )}
 
-        {/* ACCOUNTS (FEES) SECTION */}
         {activeTab === 'accounts' && !selectedMember && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {users.map(u => (
@@ -311,7 +308,6 @@ const Admin: React.FC<AdminProps> = ({
           </div>
         )}
 
-        {/* SCHOOLS SECTION */}
         {activeTab === 'schools' && !selectedSchool && (
           <div className="space-y-6">
             <button onClick={() => { setEditingId(null); setModalType('school'); setShowModal(true); }} className="w-full py-5 bg-indigo-600 text-white rounded-[2rem] font-black shadow-xl flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all"><Plus size={24}/> <span>নতুন গীতা স্কুল যোগ করুন</span></button>
@@ -351,6 +347,7 @@ const Admin: React.FC<AdminProps> = ({
                 <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
              </div>
              
+             {/* অ্যাডমিন প্যানেলে শিক্ষার্থীর লিস্টের তথ্যের লেবেল আপডেট */}
              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {schoolStudents.map(st => (
                   <div key={st.id} className="bg-white dark:bg-slate-800 p-5 rounded-[2.2rem] border-2 flex items-center justify-between shadow-sm group hover:border-indigo-600 transition-all">
@@ -358,7 +355,12 @@ const Admin: React.FC<AdminProps> = ({
                         <img src={st.image} className="w-14 h-14 rounded-2xl object-cover border-2 border-indigo-50" />
                         <div>
                            <h5 className="font-black text-sm dark:text-white leading-tight">{st.name}</h5>
-                           <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1">রোল: {st.roll} | শ্রেণী: {st.className}</p>
+                           <div className="flex flex-col mt-1">
+                             <p className="text-[10px] text-indigo-500 font-black uppercase tracking-wider">শ্রেণী: {st.roll}</p>
+                             <div className="flex items-center text-[9px] text-gray-400 font-bold mt-0.5">
+                               <Smartphone size={10} className="mr-1"/> মোবাইল: {st.className}
+                             </div>
+                           </div>
                         </div>
                      </div>
                      <button onClick={() => deleteItem('students', st.id)} className="p-2.5 text-red-500 bg-red-50 dark:bg-red-950/30 rounded-xl hover:bg-red-500 hover:text-white transition-all"><Trash2 size={16}/></button>
@@ -473,7 +475,6 @@ const Admin: React.FC<AdminProps> = ({
         )}
       </div>
 
-      {/* MODAL SYSTEM */}
       {showModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
           <div className="bg-white dark:bg-slate-800 w-full max-w-lg rounded-[3rem] p-10 max-h-[90vh] overflow-y-auto border-4 border-indigo-600 shadow-2xl relative">
@@ -545,8 +546,9 @@ const Admin: React.FC<AdminProps> = ({
                     <input type="text" placeholder="মাতা" className="w-full p-5 bg-gray-50 dark:bg-slate-900 border-2 rounded-2xl font-bold dark:text-white outline-none" value={studentForm.motherName} onChange={e => setStudentForm({...studentForm, motherName: e.target.value})} />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <input type="text" placeholder="রোল" className="w-full p-5 bg-gray-50 dark:bg-slate-900 border-2 rounded-2xl font-bold dark:text-white outline-none" value={studentForm.roll} onChange={e => setStudentForm({...studentForm, roll: e.target.value})} />
-                    <input type="text" placeholder="শ্রেণী" className="w-full p-5 bg-gray-50 dark:bg-slate-900 border-2 rounded-2xl font-bold dark:text-white outline-none" value={studentForm.className} onChange={e => setStudentForm({...studentForm, className: e.target.value})} />
+                    {/* ইনপুট লেবেল পরিবর্তন: রোলের জায়গায় শ্রেণী এবং শ্রেণীর জায়গায় মোবাইল নম্বর */}
+                    <input type="text" placeholder="শ্রেণী" className="w-full p-5 bg-gray-50 dark:bg-slate-900 border-2 rounded-2xl font-bold dark:text-white outline-none" value={studentForm.roll} onChange={e => setStudentForm({...studentForm, roll: e.target.value})} />
+                    <input type="text" placeholder="মোবাইল নম্বর" className="w-full p-5 bg-gray-50 dark:bg-slate-900 border-2 rounded-2xl font-bold dark:text-white outline-none" value={studentForm.className} onChange={e => setStudentForm({...studentForm, className: e.target.value})} />
                   </div>
                   <input type="text" placeholder="শিক্ষার্থীর ছবি ইউআরএল" className="w-full p-5 bg-gray-50 dark:bg-slate-900 border-2 rounded-2xl font-bold dark:text-white outline-none" value={studentForm.image} onChange={e => setStudentForm({...studentForm, image: e.target.value})} />
                   <button onClick={() => handleSave('students', studentForm, onUpdateSchools)} disabled={loading} className="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black shadow-lg flex items-center justify-center space-x-2">
