@@ -67,8 +67,16 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-indigo-950 via-indigo-900 to-indigo-800">
       <div className="w-full max-w-md bg-white rounded-[2.5rem] p-8 sm:p-10 shadow-2xl border border-white/20 animate-fadeIn">
         <div className="text-center mb-10">
-          <div className="w-20 h-20 mx-auto mb-6 bg-orange-500 rounded-3xl shadow-xl flex items-center justify-center p-4">
-             <span className="text-white text-5xl font-black">ॐ</span>
+          {/* DYNAMIC LOGO FROM CONSTANTS */}
+          <div className="w-24 h-24 mx-auto mb-6 bg-indigo-50 rounded-3xl shadow-xl flex items-center justify-center p-4 overflow-hidden border border-indigo-100">
+             <img 
+               src={APP_CONFIG.logoUrl} 
+               alt="Logo" 
+               className="w-full h-full object-contain"
+               onError={(e) => {
+                 e.currentTarget.src = APP_CONFIG.placeholderLogo;
+               }}
+             />
           </div>
           <h2 className="text-2xl font-black text-indigo-950">{APP_CONFIG.siteName}</h2>
           <p className="text-indigo-500 font-bold text-[10px] mt-2 uppercase tracking-widest">{APP_CONFIG.siteTagline}</p>
@@ -76,7 +84,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div className="space-y-1">
-            <label className="text-[10px] font-black text-gray-400 uppercase ml-4 tracking-widest">মোবাইল নাম্বার</label>
+            <label className="text-[10px] font-black text-gray-400 uppercase ml-4 tracking-widest">মোবাইল নম্বর</label>
             <div className="relative">
               <Smartphone className="absolute left-4 top-1/2 -translate-y-1/2 text-indigo-600" size={18} />
               <input 
@@ -121,12 +129,12 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             </div>
           </div>
 
-          {error && <p className="text-red-500 text-[10px] font-black text-center bg-red-50 p-2 rounded-lg">{error}</p>}
+          {error && <p className="text-red-500 text-[10px] font-black text-center bg-red-50 p-2 rounded-lg border border-red-100">{error}</p>}
 
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-lg shadow-indigo-200 flex items-center justify-center space-x-2 active:scale-95 transition-all"
+            className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-lg shadow-indigo-200 flex items-center justify-center space-x-2 active:scale-95 transition-all hover:bg-indigo-700"
           >
             {loading ? <Loader2 className="animate-spin" /> : <ArrowRight size={20} />}
             <span>লগইন করুন</span>

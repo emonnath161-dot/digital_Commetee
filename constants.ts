@@ -4,8 +4,10 @@ import { Designation } from './types';
 // এখান থেকে আপনি সহজেই নাম এবং লোগো পরিবর্তন করতে পারবেন
 export const APP_CONFIG = {
   siteName: "বাগীশিক উত্তর মাদার্শা",
-  siteTagline: "ডিজিটাল কমিটি ম্যানেজমেন্ট",
-  logoUrl: "logo.png", // এখানে আপনার লোগোর লিংক দিন
+  siteTagline: "কমিটি ম্যানেজমেন্ট",
+  // লোগো পরিবর্তন করতে নিচের লিংকের জায়গায় আপনার লোগোর ইউআরএল (URL) বসিয়ে দিন
+  logoUrl: "https://i.postimg.cc/xTQJTvJk/1000094358-removebg-preview.png", 
+  // ব্যাকআপ লোগো (যদি উপরের লোগো কাজ না করে)
   placeholderLogo: "https://ui-avatars.com/api/?name=ॐ&background=ff9800&color=fff&size=200"
 };
 

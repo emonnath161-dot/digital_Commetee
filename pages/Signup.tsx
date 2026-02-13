@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Designation } from '../types';
-import { DESIGNATIONS, BLOOD_GROUPS } from '../constants';
+import { DESIGNATIONS, BLOOD_GROUPS, APP_CONFIG } from '../constants';
 import { UserPlus, Loader2, Smartphone, Lock, MapPin, ChevronDown, ShieldCheck, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
@@ -67,10 +67,19 @@ const Signup: React.FC<SignupProps> = ({ onSignup }) => {
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-indigo-950 via-indigo-900 to-indigo-800 overflow-y-auto py-12">
       <div className="w-full max-w-md bg-white rounded-[2.5rem] p-8 sm:p-10 shadow-2xl border border-white/20 animate-fadeIn">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto mb-4 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600 shadow-inner">
-            <UserPlus size={32} />
+          {/* LOGO SECTION */}
+          <div className="w-20 h-20 mx-auto mb-4 bg-indigo-50 rounded-3xl p-3 shadow-inner flex items-center justify-center overflow-hidden">
+             <img 
+               src={APP_CONFIG.logoUrl} 
+               alt="Logo" 
+               className="w-full h-full object-contain"
+               onError={(e) => {
+                 e.currentTarget.src = APP_CONFIG.placeholderLogo;
+               }}
+             />
           </div>
           <h2 className="text-2xl font-black text-indigo-950">সদস্য নিবন্ধন</h2>
+          <p className="text-indigo-500 font-bold text-[10px] mt-1 uppercase tracking-widest">{APP_CONFIG.siteName}</p>
         </div>
 
         <form onSubmit={handleSignup} className="space-y-4">
@@ -78,7 +87,7 @@ const Signup: React.FC<SignupProps> = ({ onSignup }) => {
             <label className="text-[10px] font-black text-gray-400 uppercase ml-4 tracking-widest">আপনার নাম *</label>
             <input 
               type="text"
-              className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-indigo-600 font-bold text-gray-700"
+              className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-indigo-600 font-bold text-gray-700 transition-all"
               placeholder="নাম লিখুন"
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -88,25 +97,31 @@ const Signup: React.FC<SignupProps> = ({ onSignup }) => {
           <div className="grid grid-cols-2 gap-3">
              <div className="space-y-1">
                 <label className="text-[10px] font-black text-gray-400 uppercase ml-4 tracking-widest">পদবী *</label>
-                <select 
-                  className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-indigo-600 font-bold text-gray-700 appearance-none"
-                  value={formData.designation}
-                  onChange={(e) => setFormData({...formData, designation: e.target.value as any})}
-                >
-                  <option value="">নির্বাচন</option>
-                  {DESIGNATIONS.map(d => <option key={d} value={d}>{d}</option>)}
-                </select>
+                <div className="relative">
+                  <select 
+                    className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-indigo-600 font-bold text-gray-700 appearance-none transition-all"
+                    value={formData.designation}
+                    onChange={(e) => setFormData({...formData, designation: e.target.value as any})}
+                  >
+                    <option value="">নির্বাচন</option>
+                    {DESIGNATIONS.map(d => <option key={d} value={d}>{d}</option>)}
+                  </select>
+                  <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                </div>
              </div>
              <div className="space-y-1">
                 <label className="text-[10px] font-black text-gray-400 uppercase ml-4 tracking-widest">রক্তের গ্রুপ *</label>
-                <select 
-                  className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-indigo-600 font-bold text-gray-700 appearance-none"
-                  value={formData.bloodGroup}
-                  onChange={(e) => setFormData({...formData, bloodGroup: e.target.value})}
-                >
-                  <option value="">নির্বাচন</option>
-                  {BLOOD_GROUPS.map(bg => <option key={bg} value={bg}>{bg}</option>)}
-                </select>
+                <div className="relative">
+                  <select 
+                    className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-indigo-600 font-bold text-gray-700 appearance-none transition-all"
+                    value={formData.bloodGroup}
+                    onChange={(e) => setFormData({...formData, bloodGroup: e.target.value})}
+                  >
+                    <option value="">নির্বাচন</option>
+                    {BLOOD_GROUPS.map(bg => <option key={bg} value={bg}>{bg}</option>)}
+                  </select>
+                  <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                </div>
              </div>
           </div>
 
@@ -114,7 +129,7 @@ const Signup: React.FC<SignupProps> = ({ onSignup }) => {
             <label className="text-[10px] font-black text-gray-400 uppercase ml-4 tracking-widest">মোবাইল নম্বর *</label>
             <input 
               type="tel"
-              className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-indigo-600 font-bold text-gray-700"
+              className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-indigo-600 font-bold text-gray-700 transition-all"
               placeholder="০১XXXXXXXXX"
               value={formData.mobile}
               onChange={(e) => setFormData({...formData, mobile: e.target.value})}
@@ -125,7 +140,7 @@ const Signup: React.FC<SignupProps> = ({ onSignup }) => {
             <label className="text-[10px] font-black text-gray-400 uppercase ml-4 tracking-widest">পাসওয়ার্ড *</label>
             <input 
               type="password"
-              className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-indigo-600 font-bold text-gray-700"
+              className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-indigo-600 font-bold text-gray-700 transition-all"
               placeholder="পাসওয়ার্ড দিন"
               value={formData.password}
               onChange={(e) => setFormData({...formData, password: e.target.value})}
@@ -136,19 +151,19 @@ const Signup: React.FC<SignupProps> = ({ onSignup }) => {
             <label className="text-[10px] font-black text-gray-400 uppercase ml-4 tracking-widest">ঠিকানা</label>
             <input 
               type="text"
-              className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-indigo-600 font-bold text-gray-700"
+              className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-indigo-600 font-bold text-gray-700 transition-all"
               placeholder="ঠিকানা লিখুন"
               value={formData.address}
               onChange={(e) => setFormData({...formData, address: e.target.value})}
             />
           </div>
 
-          {error && <p className="text-red-500 text-[10px] font-black text-center p-2 bg-red-50 rounded-lg">{error}</p>}
+          {error && <p className="text-red-500 text-[10px] font-black text-center p-2 bg-red-50 rounded-lg border border-red-100">{error}</p>}
 
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-lg shadow-indigo-100 flex items-center justify-center space-x-2 active:scale-95 transition-all"
+            className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-lg shadow-indigo-100 flex items-center justify-center space-x-2 active:scale-95 transition-all hover:bg-indigo-700"
           >
             {loading ? <Loader2 className="animate-spin" /> : <UserPlus size={20} />}
             <span>নিবন্ধন করুন</span>
