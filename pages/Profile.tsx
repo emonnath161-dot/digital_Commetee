@@ -79,7 +79,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUpdate, isDarkMode }) => {
   };
 
   return (
-    <div className="animate-fadeIn max-w-2xl mx-auto pt-6">
+    <div className="animate-fadeIn max-w-2xl mx-auto pt-6 px-1">
       <div className={`rounded-[2.5rem] overflow-hidden shadow-2xl border transition-all duration-500 pb-10 ${isDarkMode ? 'bg-slate-800 border-slate-700 shadow-slate-950' : 'bg-white border-gray-100 shadow-indigo-100'}`}>
         <div className="flex flex-col items-center pt-10 px-6">
           <div className="relative group">
@@ -109,42 +109,45 @@ const Profile: React.FC<ProfileProps> = ({ user, onUpdate, isDarkMode }) => {
             {!isEditing ? (
               <>
                 <div className={`p-6 rounded-[2rem] flex items-center space-x-5 border shadow-sm transition-all duration-300 hover:shadow-md ${isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-gradient-to-r from-indigo-50 to-white border-indigo-50'}`}>
-                  <div className="bg-indigo-600 p-3 rounded-2xl text-white shadow-lg">
+                  <div className="bg-indigo-600 p-3 rounded-2xl text-white shadow-lg flex-shrink-0">
                     <Phone size={24} />
                   </div>
-                  <div className="flex-grow">
+                  <div className="flex-grow min-w-0">
                     <p className={`text-xs font-black uppercase tracking-wider ${isDarkMode ? 'text-indigo-400' : 'text-indigo-500'}`}>মোবাইল নাম্বার</p>
                     <p className={`text-xl font-bold ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>{user.mobile}</p>
                   </div>
                 </div>
 
+                {/* ইমেইল সেকশন আপডেট: break-all এবং leading-tight যুক্ত করা হয়েছে */}
                 <div className={`p-6 rounded-[2rem] flex items-center space-x-5 border shadow-sm transition-all duration-300 hover:shadow-md ${isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-gradient-to-r from-purple-50 to-white border-purple-50'}`}>
-                  <div className="bg-purple-600 p-3 rounded-2xl text-white shadow-lg">
+                  <div className="bg-purple-600 p-3 rounded-2xl text-white shadow-lg flex-shrink-0">
                     <Mail size={24} />
                   </div>
-                  <div className="flex-grow">
+                  <div className="flex-grow min-w-0">
                     <p className={`text-xs font-black uppercase tracking-wider ${isDarkMode ? 'text-purple-400' : 'text-purple-500'}`}>ইমেইল ঠিকানা</p>
-                    <p className={`text-xl font-bold ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>{user.email || 'তথ্য নেই'}</p>
+                    <p className={`text-lg sm:text-xl font-bold break-all leading-tight ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>
+                      {user.email || 'তথ্য নেই'}
+                    </p>
                   </div>
                 </div>
 
                 <div className={`p-6 rounded-[2rem] flex items-center space-x-5 border shadow-sm transition-all duration-300 hover:shadow-md ${isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-gradient-to-r from-red-50 to-white border-red-50'}`}>
-                  <div className="bg-red-600 p-3 rounded-2xl text-white shadow-lg">
+                  <div className="bg-red-600 p-3 rounded-2xl text-white shadow-lg flex-shrink-0">
                     <Droplet size={24} />
                   </div>
-                  <div className="flex-grow">
+                  <div className="flex-grow min-w-0">
                     <p className={`text-xs font-black uppercase tracking-wider ${isDarkMode ? 'text-red-400' : 'text-red-500'}`}>রক্তের গ্রুপ</p>
                     <p className="text-xl font-black text-red-600">{user.bloodGroup}</p>
                   </div>
                 </div>
 
                 <div className={`p-6 rounded-[2rem] flex items-center space-x-5 border shadow-sm transition-all duration-300 hover:shadow-md ${isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-gradient-to-r from-orange-50 to-white border-orange-50'}`}>
-                  <div className="bg-orange-600 p-3 rounded-2xl text-white shadow-lg">
+                  <div className="bg-orange-600 p-3 rounded-2xl text-white shadow-lg flex-shrink-0">
                     <MapPin size={24} />
                   </div>
-                  <div className="flex-grow">
+                  <div className="flex-grow min-w-0">
                     <p className={`text-xs font-black uppercase tracking-wider ${isDarkMode ? 'text-orange-400' : 'text-orange-500'}`}>ঠিকানা</p>
-                    <p className={`text-sm font-bold ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>{user.address || 'তথ্য নেই'}</p>
+                    <p className={`text-sm font-bold leading-snug break-words ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>{user.address || 'তথ্য নেই'}</p>
                   </div>
                 </div>
               </>
@@ -193,7 +196,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUpdate, isDarkMode }) => {
             )}
           </div>
 
-          <div className="mt-12 w-full flex flex-col space-y-4">
+          <div className="mt-12 w-full flex flex-col space-y-4 px-2">
             {!isEditing ? (
               <button 
                 onClick={() => setIsEditing(true)}
