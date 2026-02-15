@@ -69,7 +69,7 @@ const Contact: React.FC<ContactProps> = ({ contactInfo }) => {
         <div className="text-center">
           <p className="text-[10px] text-gray-400 font-black uppercase mb-8 tracking-[0.3em]">সামাজিক যোগাযোগ</p>
           <div className="flex justify-center space-x-6">
-            <a href={contactInfo.facebook} target="_blank" rel="noreferrer" className="w-16 h-16 bg-blue-50 dark:bg-slate-900 rounded-[1.5rem] flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm hover:shadow-blue-200 dark:hover:shadow-none hover:-translate-y-1">
+            <a href={contactInfo.facebook} target="https://www.facebook.com/profile.php?id=100082086956632" rel="noreferrer" className="w-16 h-16 bg-blue-50 dark:bg-slate-900 rounded-[1.5rem] flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm hover:shadow-blue-200 dark:hover:shadow-none hover:-translate-y-1">
               <Facebook size={28} />
             </a>
             <a href={contactInfo.website} target="_blank" rel="noreferrer" className="w-16 h-16 bg-indigo-50 dark:bg-slate-900 rounded-[1.5rem] flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all shadow-sm hover:shadow-indigo-200 dark:hover:shadow-none hover:-translate-y-1">
